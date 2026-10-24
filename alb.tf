@@ -60,3 +60,4 @@ resource "aws_lb_listener" "http" {
     protocol    = "HTTPS"
     status_code = "HTTP_301"
 }
+}
