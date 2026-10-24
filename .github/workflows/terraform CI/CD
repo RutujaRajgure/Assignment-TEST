@@ -1,0 +1,45 @@
+name: Terraform CI/CD
+
+on:
+pull_request:
+branches:
+- main
+paths:
+- "*.tf"
+- ".github/workflows/terraform.yml"
+
+push:
+branches:
+- main
+paths:
+- "*.tf"
+- ".github/workflows/terraform.yml"
+
+workflow_dispatch:
+
+permissions:
+contents: read
+
+jobs:
+terraform:
+name: Terraform Validation
+runs-on: ubuntu-latest
+
+steps:
+  - name: Checkout Repository
+    uses: actions/checkout@v4
+
+  - name: Setup Terraform
+    uses: hashicorp/setup-terraform@v3
+    with:
+      terraform_version: "1.8.5"
+
+  - name: Terraform Format Check
+    run: terraform fmt -check -recursive
+
+  - name: Terraform Init
+    run: terraform init -backend=false -input=false
+
+  - name: Terraform Validate
+    run: terraform validate
+
